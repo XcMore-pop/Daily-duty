@@ -97,8 +97,18 @@
     
     .copyright { text-align: center; font-size: 0.7rem; color: #b2bec3; margin-top: 25px; padding-top: 15px; border-top: 1px dashed #dfe6e9; }
     #formPage { display: none; }
-    /* ปรับแต่ง input date ให้ดูเหมือนตัวหนังสือปกติเมื่อล็อก */
-    .form-control[readonly] { background-color: #f8f9fa; cursor: not-allowed; }
+    
+    /* สไตล์ใหม่สำหรับวันที่ที่ดูได้อย่างเดียว */
+    .date-display-box {
+      background-color: #f8f9fa;
+      border: 1px solid #DEE2E6;
+      border-radius: 12px;
+      padding: 10px 15px;
+      font-weight: 600;
+      color: #2C3E50;
+      pointer-events: none; /* ห้ามกดเด็ดขาด */
+    }
+
     .btn-back { color: #95A5A6; text-decoration: none; font-size: 0.85rem; cursor: pointer; }
   </style>
 </head>
@@ -135,8 +145,9 @@
         <form id="dutyForm">
           <input type="hidden" name="dayName" id="inputDayName">
           <div class="mb-3">
-            <label class="form-label small fw-bold text-muted">วันที่ส่งเวร (ล็อกเฉพาะวันนี้)</label>
-            <input type="date" name="selectedDate" id="selectedDate" class="form-control" required readonly>
+            <label class="form-label small fw-bold text-muted">วันที่ส่งเวร (วันนี้เท่านั้น)</label>
+            <input type="date" name="selectedDate" id="selectedDate" style="display: none;">
+            <div id="dateTextDisplay" class="date-display-box"></div>
           </div>
           <div id="studentContainer" class="mb-4"></div>
           <div class="mb-3">
@@ -184,22 +195,22 @@
     document.getElementById('inputDayName').value = day;
     
     const dateInput = document.getElementById('selectedDate');
+    const dateTextDisplay = document.getElementById('dateTextDisplay');
     const today = new Date();
     
-    // จัดรูปแบบวันที่เป็น YYYY-MM-DD
+    // จัดรูปแบบวันที่ YYYY-MM-DD สำหรับระบบ
     const yyyy = today.getFullYear();
     const mm = String(today.getMonth() + 1).padStart(2, '0');
     const dd = String(today.getDate()).padStart(2, '0');
     const todayString = `${yyyy}-${mm}-${dd}`;
     
-    // บังคับล็อกค่าวันปัจจุบัน
-    dateInput.value = todayString;
-    dateInput.min = todayString;
-    dateInput.max = todayString;
+    // จัดรูปแบบวันที่สำหรับแสดงผลให้คนดู (ไทย)
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const dateFormattedThai = today.toLocaleDateString('th-TH', options);
     
-    // ป้องกันการแก้ผ่านคีย์บอร์ดหรือการคลิกเปิดปฏิทินซ้ำ
-    dateInput.onkeydown = (e) => e.preventDefault();
-    dateInput.onclick = (e) => e.preventDefault();
+    // บังคับล็อกค่า
+    dateInput.value = todayString;
+    dateTextDisplay.innerText = dateFormattedThai;
 
     currentDayFriends = dutyRoster[day] || [];
     renderStudents(currentDayFriends);
