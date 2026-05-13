@@ -24,7 +24,7 @@
       min-height: 100vh; 
       display: flex; 
       justify-content: center; 
-      padding: 60px 20px 20px 20px; /* เพิ่ม padding บนให้หลบโลโก้ */
+      padding: 60px 20px 20px 20px;
       margin: 0; 
       color: var(--text-dark); 
     }
@@ -43,10 +43,9 @@
       position: relative;
     }
 
-    /* === ปรับแต่ง Logo ให้กลมและพอดีที่สุด === */
     .logo-container { 
       text-align: center; 
-      margin-top: -90px; /* ดันโลโก้ขึ้นไปครึ่งหนึ่งของการ์ด */
+      margin-top: -90px; 
       margin-bottom: 15px;
       position: relative;
       z-index: 10;
@@ -55,10 +54,10 @@
     .main-logo { 
       width: 150px; 
       height: 150px;
-      object-fit: cover; /* ทำให้รูปเต็มวงกลมพอดี */
+      object-fit: cover; 
       background: white; 
       border-radius: 50%; 
-      border: 6px solid white; /* ขอบวงกลมสีขาวตัดกับพื้นหลัง */
+      border: 6px solid white; 
       box-shadow: 0 8px 20px rgba(0,0,0,0.15);
       display: inline-block;
     }
@@ -66,7 +65,6 @@
     .header-section h3 { color: var(--smte-blue); font-weight: 700; text-align: center; margin-bottom: 5px; }
     .header-section p { color: #7F8C8D; font-size: 0.85rem; text-align: center; margin-bottom: 25px; }
 
-    /* ปุ่มเลือกวัน */
     .btn-day { 
       height: 60px; 
       border: none; 
@@ -99,7 +97,8 @@
     
     .copyright { text-align: center; font-size: 0.7rem; color: #b2bec3; margin-top: 25px; padding-top: 15px; border-top: 1px dashed #dfe6e9; }
     #formPage { display: none; }
-    .form-control { border-radius: 12px; border: 1px solid #DEE2E6; }
+    /* ปรับแต่ง input date ให้ดูเหมือนตัวหนังสือปกติเมื่อล็อก */
+    .form-control[readonly] { background-color: #f8f9fa; cursor: not-allowed; }
     .btn-back { color: #95A5A6; text-decoration: none; font-size: 0.85rem; cursor: pointer; }
   </style>
 </head>
@@ -110,11 +109,11 @@
       
       <div id="selectDayPage">
         <div class="logo-container">
-          <img src="https://i.postimg.cc/HxhbmPyk/Untitled-design.png" alt="SMTE Logo" class="main-logo">
+          <img src="https://i.postimg.cc/rsVTMcvN/Untitled-design-(1).png" alt="SMTE Logo" class="main-logo">
         </div>
 
         <div class="header-section">
-          <h3> DEK SMTE 14 </h3>
+          <h3> DEK SMTE 12 </h3>
           <p>ระบบส่งเวรประจำวัน Room 544</p>
         </div>
 
@@ -136,8 +135,8 @@
         <form id="dutyForm">
           <input type="hidden" name="dayName" id="inputDayName">
           <div class="mb-3">
-            <label class="form-label small fw-bold text-muted">วันที่ส่งเวร</label>
-            <input type="date" name="selectedDate" id="selectedDate" class="form-control" required>
+            <label class="form-label small fw-bold text-muted">วันที่ส่งเวร (ล็อกเฉพาะวันนี้)</label>
+            <input type="date" name="selectedDate" id="selectedDate" class="form-control" required readonly>
           </div>
           <div id="studentContainer" class="mb-4"></div>
           <div class="mb-3">
@@ -168,39 +167,39 @@
   </div>
 
 <script>
-  // รายชื่อสมาชิก [cite: 41]
   const dutyRoster = {
     "วันจันทร์": ["ธนนุกูล หลักคำ", "ธนยศ ฐิตะสาร", "อคิราภ์ กล้าหาญ", "วรพงศ์ ทองสุวรรณ"],
     "วันอังคาร": ["สิริวิมล อร่ามศรี", "ณัฐธยาน์ ทองสุก", "คณิตา บัวงาม", "ภภีมม์ ร้อยพิลา", "สุธาสินี พิทักษ์วงดีงาม"],
     "วันพุธ": ["ศิรินภาพร จันทร์สว่าง", "ปัญจวิชญ์ อักษรดี", "ศิวกร กอแก้ว", "สุรัฐติกาล ทองแพรว", "พิมพิกา สำราญวงค์"],
-    "วันพฤหัสบดี": ["อุษมา ทองเขื่อน", "อุบลรักษ์ เเซ่อึง", "ณรินทร์ภัทร ภูนาเหนือ", "ชนิศา บุญจอง", "เกษเเก้ว วงศ์สมบูรณ์", "อินทิรา เสียวคำ", "มัลริกา ปัดฐพิมพ์"],
+    "วันพฤหัสบดี": ["อุษมา ทองเขื่อน", "อุบนรักษ์ เเซ่อึง", "ณรินทร์ภัทร ภูนาเหนือ", "ชนิศา บุญจอง", "เกษเเก้ว วงศ์สมบูรณ์", "อินทิรา เสียวคำ", "มัลริกา ปัดฐพิมพ์"],
     "วันศุกร์": ["พงษ์พิพัฒ พันงาม", "ญาณิศา โครตสมบัติ", "ชัญญานุช สำอางค์", "ณัฐนิชา ไพรเลียง", "พิชามญชุ์ สุขดี", "ธิดารัตน์ ภาระพันธ์"]
   };
+
   let currentDayFriends = [];
 
-function showForm(day) {
+  function showForm(day) {
     document.getElementById('selectDayPage').style.display = 'none';
     document.getElementById('formPage').style.display = 'block';
     document.getElementById('displayDay').innerText = day;
     document.getElementById('inputDayName').value = day;
     
-    // 1. ตั้งค่าวันที่ในช่อง Input ให้เป็นวันปัจจุบัน
     const dateInput = document.getElementById('selectedDate');
     const today = new Date();
-    dateInput.valueAsDate = today;
     
-    // 2. จัดรูปแบบวันที่เป็น YYYY-MM-DD สำหรับ HTML Min/Max
+    // จัดรูปแบบวันที่เป็น YYYY-MM-DD
     const yyyy = today.getFullYear();
     const mm = String(today.getMonth() + 1).padStart(2, '0');
     const dd = String(today.getDate()).padStart(2, '0');
     const todayString = `${yyyy}-${mm}-${dd}`;
     
-    // 3. ล็อกให้เลือกได้แค่วันเดียว (วันนี้เท่านั้น)
-    dateInput.setAttribute("min", todayString); // ห้ามเลือกย้อนหลัง
-    dateInput.setAttribute("max", todayString); // ห้ามเลือกวันข้างหน้า
+    // บังคับล็อกค่าวันปัจจุบัน
+    dateInput.value = todayString;
+    dateInput.min = todayString;
+    dateInput.max = todayString;
     
-    // ป้องกันการพิมพ์แก้วันที่เอง (สำหรับบาง Browser)
+    // ป้องกันการแก้ผ่านคีย์บอร์ดหรือการคลิกเปิดปฏิทินซ้ำ
     dateInput.onkeydown = (e) => e.preventDefault();
+    dateInput.onclick = (e) => e.preventDefault();
 
     currentDayFriends = dutyRoster[day] || [];
     renderStudents(currentDayFriends);
