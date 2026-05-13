@@ -319,8 +319,8 @@
 
       let message = `*📢  รายงานการส่งเวร : ${dayName}*\n📅  วันที่ : ${selectedDate}\n⏰  เวลา : ${now} น.\n\n`;
       message += `*🟢 มาทำเวร:*\n${listDone.join("\n") || "- ไม่มี -"}\n\n`;
+      message += `*🔴 ไม่มาทำเวร:*\n${listMissing.join("\n") || "- ไม่มี -"}\n\n`;
       message += `*🟡 ลา:*\n${listLeave.join("\n") || "- ไม่มี -"}\n\n`;
-      message += `*🔴 ไม่มาทำ:*\n${listMissing.join("\n") || "- ไม่มี -"}\n\n`;
       message += `_แจ้งเตือนผ่าน ระบบส่งเวรประจำวัน_`;
 
       const formData = new FormData();
