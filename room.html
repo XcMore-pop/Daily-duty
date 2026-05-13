@@ -147,7 +147,7 @@
           </div>
 
           <div class="pdpa-box">
-            <div class="form-check">ฟ
+            <div class="form-check">
               <input class="form-check-input" type="checkbox" id="pdpaCheck">
               <label class="form-check-label" for="pdpaCheck">
                 ยินยอมให้ส่งข้อมูลและรูปภาพเข้ากลุ่ม Telegram เพื่อแจ้งเตือนเท่านั้น
@@ -178,14 +178,33 @@
   };
   let currentDayFriends = [];
 
-  function showForm(day) {
+function showForm(day) {
     document.getElementById('selectDayPage').style.display = 'none';
     document.getElementById('formPage').style.display = 'block';
     document.getElementById('displayDay').innerText = day;
     document.getElementById('inputDayName').value = day;
-    document.getElementById('selectedDate').valueAsDate = new Date();
+    
+    // 1. ตั้งค่าวันที่ในช่อง Input ให้เป็นวันปัจจุบัน
+    const dateInput = document.getElementById('selectedDate');
+    const today = new Date();
+    dateInput.valueAsDate = today;
+    
+    // 2. จัดรูปแบบวันที่เป็น YYYY-MM-DD สำหรับ HTML Min/Max
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    const todayString = `${yyyy}-${mm}-${dd}`;
+    
+    // 3. ล็อกให้เลือกได้แค่วันเดียว (วันนี้เท่านั้น)
+    dateInput.setAttribute("min", todayString); // ห้ามเลือกย้อนหลัง
+    dateInput.setAttribute("max", todayString); // ห้ามเลือกวันข้างหน้า
+    
+    // ป้องกันการพิมพ์แก้วันที่เอง (สำหรับบาง Browser)
+    dateInput.onkeydown = (e) => e.preventDefault();
+
     currentDayFriends = dutyRoster[day] || [];
     renderStudents(currentDayFriends);
+    window.scrollTo(0,0);
   }
 
   function goBack() {
